@@ -1,0 +1,30 @@
+{
+  "release": {
+    "release_id": "v2.3.0",
+    "git_sha": "abc123",
+    "artifact_digest": "sha256:..."
+  },
+  "runtime": {
+    "python": "3.11.x",
+    "dependency_lock_sha256": "..."
+  },
+  "environment": {
+    "bundle_target": "prod",
+    "environment": "prod"
+  },
+  "genai": {
+    "prompt_name": "main.genai.sf_pricing_agent",
+    "prompt_resolved_version": 12,
+    "model_endpoint": "databricks-llama-4-maverick",
+    "model_type": "chat",
+    "model_temperature": 0.0,
+    "model_max_tokens": 800,
+    "uc_function": "main.genai.classify_price_tier_uc"
+  },
+  "evaluation": {
+    "dataset_name": "main.genai.simple_tool_agent_eval",
+    "dataset_digest": "...",
+    "evaluation_run_id": "...",
+    "report_sha256": "..."
+  }
+}

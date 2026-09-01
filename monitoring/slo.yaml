@@ -1,0 +1,25 @@
+service: simple-tool-calling-agent
+
+slis:
+  availability:
+    target: 0.995
+    window: 30d
+  p95_latency_ms:
+    target_max: 8000
+    window: 1h
+  tool_error_rate:
+    target_max: 0.01
+    window: 1h
+  genai_quality:
+    tool_correctness_min: 0.95
+    answer_correctness_min: 0.90
+
+alerts:
+  - name: availability_breach
+    severity: page
+  - name: latency_breach
+    severity: ticket
+  - name: genai_quality_degradation
+    severity: investigate
+  - name: cost_regression
+    severity: investigate

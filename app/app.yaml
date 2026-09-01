@@ -1,0 +1,19 @@
+command:
+  - uvicorn
+  - simple_agent.server:app
+  - --host
+  - "0.0.0.0"
+  - --port
+  - "8000"
+
+env:
+  - name: ENVIRONMENT
+    value: "prod"
+  - name: AGENT_BACKEND
+    value: "databricks"
+  - name: DATABRICKS_MODEL_ENDPOINT
+    value: "databricks-llama-4-maverick"
+  - name: UC_FUNCTION_FULL_NAME
+    value: "main.genai.classify_price_tier_uc"
+  - name: MLFLOW_EXPERIMENT_NAME
+    valueFrom: "agent-experiment"

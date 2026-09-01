@@ -1,0 +1,83 @@
+bundle:
+  name: simple-tool-calling-agent
+
+variables:
+  app_name:
+    description: Databricks App name
+    default: simple-tool-agent
+  model_endpoint:
+    description: Foundation Model serving endpoint
+    default: databricks-llama-4-maverick
+  uc_function_full_name:
+    description: Governed UC function catalog.schema.function
+    default: main.genai.classify_price_tier_uc
+  prompt_name:
+    description: MLflow Prompt Registry name
+    default: main.genai.sf_pricing_agent
+  eval_dataset_name:
+    description: MLflow Evaluation Dataset in Unity Catalog
+    default: main.genai.simple_tool_agent_eval
+
+resources:
+  experiments:
+    agent_experiment:
+      name: /Shared/${bundle.name}-${bundle.target}
+
+  apps:
+    agent_app:
+      name: ${var.app_name}-${bundle.target}
+      description: Tool-calling agent with MLflow tracing and CI/CD
+      source_code_path: .
+      resources:
+        - name: agent-experiment
+          experiment:
+            experiment_id: ${resources.experiments.agent_experiment.id}
+            permission: CAN_MANAGE
+      config:
+        command:
+          - uvicorn
+          - simple_agent.server:app
+          - --host
+          - "0.0.0.0"
+          - --port
+          - "8000"
+        env:
+          - name: ENVIRONMENT
+            value: ${bundle.target}
+          - name: AGENT_BACKEND
+            value: databricks
+          - name: MODEL_ENDPOINT
+            value: ${var.model_endpoint}
+          - name: PROMPT_NAME
+            value: ${var.prompt_name}
+          - name: PROMPT_REF
+            value: ${bundle.target}
+          - name: EVAL_DATASET_NAME
+            value: ${var.eval_dataset_name}
+          - name: UC_FUNCTION_FULL_NAME
+            value: ${var.uc_function_full_name}
+          - name: MLFLOW_EXPERIMENT_NAME
+            valueFrom: agent-experiment
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      app_name: simple-tool-agent
+
+  staging:
+    mode: production
+    workspace:
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      app_name: simple-tool-agent
+
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      app_name: simple-tool-agent

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "single_midrange",
+    "input": "Is $150/night a good deal in SF?",
+    "expected_tiers": ["Mid-Range"],
+    "expected_tool_calls": 1
+  },
+  {
+    "id": "single_luxury",
+    "input": "What tier is $500/night?",
+    "expected_tiers": ["Luxury"],
+    "expected_tool_calls": 1
+  },
+  {
+    "id": "multi_price",
+    "input": "Classify these prices: $80, $200, $350",
+    "expected_tiers": ["Budget", "Premium", "Luxury"],
+    "expected_tool_calls": 3
+  }
+]
